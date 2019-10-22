@@ -23,8 +23,9 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
     ArrayList<Insus> items = new ArrayList<Insus>();
     Activity activity;
 
-    public TodoAdapter(Activity activity) {
+    public TodoAdapter(Activity activity, ArrayList<Insus> items) {
         this.activity = activity;
+        this.items = items;
     }
     @NonNull
     @Override
