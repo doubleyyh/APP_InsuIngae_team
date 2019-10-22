@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1057539691089",
+    "firebase_url": "https://insuingae-62203.firebaseio.com",
+    "project_id": "insuingae-62203",
+    "storage_bucket": "insuingae-62203.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057539691089:android:bcae1cb8188b6e92311e70",
+        "android_client_info": {
+          "package_name": "com.example.insuingae"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057539691089-3ecfg57kbfk4vvbvdgdg5jfghof6ga75.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.insuingae",
+            "certificate_hash": "c67e98c6c68248d301367be0e6d8354c3380628f"
+          }
+        },
+        {
+          "client_id": "1057539691089-d274tvt191afc9s4s8jr8ic8uqtvblmi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRFkpsII5C3Yrp51vUlu8YpAZthllxZ-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057539691089-d274tvt191afc9s4s8jr8ic8uqtvblmi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
