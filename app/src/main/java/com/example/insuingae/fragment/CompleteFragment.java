@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.example.insuingae.Insus;
 import com.example.insuingae.R;
@@ -24,14 +25,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class CompleteFragment extends Fragment {
     private RecyclerView recyclerView;
     ArrayList<Insus> insulist = new ArrayList<>();
     CompleteAdapter adapter;
-    FirebaseFirestore firebaseFirestore;
+    RelativeLayout loaderlayout;
+
 
 
     public CompleteFragment() {}
@@ -49,11 +53,12 @@ public class CompleteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        loaderlayout = getActivity().findViewById(R.id.loaderLayout);
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_to_do, container, false);
         Log.d("test", "frag2 실행");
         recyclerView = viewGroup.findViewById(R.id.recyclerView);
-        //FloatingActionButton floatingActionButton = viewGroup.findViewById(R.id.floatingActionButton).setOnClickListener();
         recyclerView.setHasFixedSize(true);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new CompleteAdapter(getActivity(), insulist);
         update();
@@ -72,8 +77,9 @@ public class CompleteFragment extends Fragment {
     }
 
     private void update() {
+        loaderlayout.setVisibility(View.VISIBLE);
+        final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseFirestore.collectionGroup("time").whereEqualTo("iscompleted", true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -82,6 +88,7 @@ public class CompleteFragment extends Fragment {
                     Log.d("test", "sucess");
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
+
                         insulist.add(new Insus(
                                 document.getData().get("title").toString(),
                                 document.getData().get("publisher").toString(),
@@ -90,6 +97,7 @@ public class CompleteFragment extends Fragment {
                                 new Date(document.getDate("createdAt").getTime())));
                     }
                     adapter.notifyDataSetChanged();
+                    loaderlayout.setVisibility(View.INVISIBLE);
                 } else {
                     Log.d("test", "Error getting documents: ", task.getException());
                 }

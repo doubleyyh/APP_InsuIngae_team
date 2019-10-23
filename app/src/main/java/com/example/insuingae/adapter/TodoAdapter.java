@@ -9,9 +9,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
@@ -19,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.insuingae.Insus;
 import com.example.insuingae.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,9 +32,12 @@ import java.util.Locale;
 
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder> {
-    ArrayList<Insus> items = new ArrayList<Insus>();
-    Activity activity;
-    LayoutInflater inflater;
+    private ArrayList<Insus> items = new ArrayList<Insus>();
+    private Activity activity;
+    private LayoutInflater inflater;
+    private Button completeButton;
+
+
 
     public TodoAdapter(Activity activity, ArrayList<Insus> items) {
         this.activity = activity;
@@ -59,6 +67,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
         LinearLayout container;
         TextView tagtextView;
         TextView datetextView;
+        RelativeLayout loaderlayout;
 
 
 
@@ -71,6 +80,9 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
             tagtextView = v.findViewById(R.id.tagTextView);
             datetextView = v.findViewById(R.id.dateTextView);
             publisherTextView = v.findViewById(R.id.publisherTextView);
+            completeButton = v.findViewById(R.id.completeButton);
+            loaderlayout = v.findViewById(R.id.loaderLayout);
+
         }
 
         public void setItem(Insus item) {
@@ -101,7 +113,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
 
 
 
-
             for (int i = 0; i < tagsList.size(); i++) {
                 String tags = tagsList.get(i);
             if(i == 0) {
@@ -119,9 +130,36 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TodoAdapter.MainViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final TodoAdapter.MainViewHolder holder, final int position) {
         Insus item = items.get(position);
         holder.setItem(item);
+        completeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.findViewById(R.id.loaderLayout).setVisibility(View.VISIBLE);
+                //버튼을 누르면 파이어베이스 상 해당 문서 iscompleted 가 true로 바뀜
+                final Insus temp_insu = items.get(position);
+                Date temp_date = temp_insu.getCreatedAt();
+                temp_insu.setIscompleted(true);
+                SimpleDateFormat colTitle =  new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                SimpleDateFormat docTitle = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+                FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                firebaseFirestore.collection("Insus").document(colTitle.format(temp_date)).collection("time").document(docTitle.format(temp_date)).set(temp_insu)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("test", "complete_success");
+
+
+                                items.remove(temp_insu);
+                                notifyDataSetChanged();
+                                Toast.makeText(activity, "해야 할일로 이동 되었습니다.", Toast.LENGTH_SHORT).show();
+                                activity.findViewById(R.id.loaderLayout).setVisibility(View.INVISIBLE);
+                            }
+                        });
+
+            }
+        });
     }
 
 

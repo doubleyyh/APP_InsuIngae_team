@@ -1,22 +1,16 @@
 package com.example.insuingae.activity;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.media.SoundPool;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.insuingae.Insus;
 import com.example.insuingae.R;
@@ -30,12 +24,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -59,6 +48,12 @@ public class WriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
 
+        Toolbar myToolbar = findViewById(R.id.include);
+        setSupportActionBar(myToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setTitle("인수인계 작성");
+        }
         /*for (String ta : tag){
             tags.add(ta);
             Log.d("test", ta);
@@ -70,6 +65,7 @@ public class WriteActivity extends AppCompatActivity {
         findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                findViewById(R.id.loaderLayout).setVisibility(View.VISIBLE);
                 storageUpload();
             }
         });
@@ -146,6 +142,7 @@ public class WriteActivity extends AppCompatActivity {
                         resultIntent.putExtra("postinfo", postInfo);
                         setResult(Activity.RESULT_OK, resultIntent);*/
                         finish();
+                        findViewById(R.id.loaderLayout).setVisibility(View.INVISIBLE);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
