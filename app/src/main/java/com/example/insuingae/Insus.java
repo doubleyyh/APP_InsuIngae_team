@@ -11,13 +11,13 @@ import java.util.Map;
 public class Insus {
     private String title;
     private String publisher;
-    private LinkedHashMap<String, Date> contents;
+    private ArrayList<String> contents;
     private Date createdAt;
     private Date completedAt;
     private boolean iscompleted;
     private ArrayList<String> tags;
 
-    public Insus(String title, String publisher, LinkedHashMap<String, Date> contents, ArrayList<String> tags, Date createdAt) {
+    public Insus(String title, String publisher, ArrayList<String> contents, ArrayList<String> tags, Date createdAt) {
         this.title = title;
         this.publisher = publisher;
         this.contents = contents;
@@ -47,7 +47,7 @@ public class Insus {
         this.tags = tags;
     }
 
-    public void setContents(LinkedHashMap<String, Date> contents) {
+    public void setContents(ArrayList<String> contents) {
         this.contents = contents;
     }
 
@@ -61,6 +61,10 @@ public class Insus {
 
     public String getTitle() {
         return title;
+    }
+
+    public ArrayList<String> getContents() {
+        return contents;
     }
 
     public void setTitle(String title) {
