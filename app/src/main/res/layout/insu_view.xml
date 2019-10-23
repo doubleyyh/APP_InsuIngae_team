@@ -36,6 +36,16 @@
                     android:textSize="30sp"
                     tools:text="제목제목" />
 
+                <CheckBox
+                    android:id="@+id/starCheckBox"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_check_box_star"
+                    android:button="@null"
+                    android:checked="false" />
+
                 <ImageButton
                     android:id="@+id/imageButton"
                     android:layout_width="40dp"
@@ -101,7 +111,7 @@
                     android:id="@+id/publisherTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="172dp"
                     android:layout_marginBottom="3dp"
                     android:layout_weight="0"
                     android:padding="3dp"
@@ -120,6 +130,7 @@
                     android:background="@drawable/ic_check_black_24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
