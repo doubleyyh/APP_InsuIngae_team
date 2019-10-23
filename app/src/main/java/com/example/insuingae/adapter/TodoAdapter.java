@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.insuingae.Insus;
 import com.example.insuingae.R;
+import com.example.insuingae.activity.MainActivity;
+import com.example.insuingae.fragment.ToDoFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,7 +34,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder> {
+public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder> {
     private ArrayList<Insus> items = new ArrayList<Insus>();
     private Activity activity;
     private LayoutInflater inflater;
@@ -70,8 +72,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
         TextView datetextView;
         RelativeLayout loaderlayout;
 
-
-
         MainViewHolder(View v) {
             super(v);
 
@@ -83,7 +83,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
             publisherTextView = v.findViewById(R.id.publisherTextView);
             completeButton = v.findViewById(R.id.completeButton);
             loaderlayout = v.findViewById(R.id.loaderLayout);
-
         }
 
         public void setItem(Insus item) {
@@ -108,7 +107,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
                 TextView textView = (TextView) inflater.inflate(R.layout.view_contents_text, container, false);
                 textView.setText(contents);
 
-
                 container.addView(textView);
             }
 
@@ -124,7 +122,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
             Date date = item.getCreatedAt();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             datetextView.setText(simpleDateFormat.format(date));
-
+            createdAtTextView.setText(timeConverter(date));
             publisherTextView.setText(item.getPublisher());
         }
 
@@ -203,8 +201,27 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
         Intent intent = new Intent(activity, c);
         activity.startActivityForResult(intent, 1);
     }
+    //시각을 전달받아 현재 시간과 차이를 구하는 메서드
+    public String timeConverter(Date date){
+        Date nowTime = new Date();
+        Date updatedTime = date;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY년 MM월 dd일");
 
+        long diff;
 
+        //현재시간과 넘어온 시간을 정수로 변환해 차이를 구한다
+        // 밀리세컨드 단위로 변환되기때문에 1000으로 나눠서 계산
+        diff = (nowTime.getTime() - updatedTime.getTime())/1000;
+        //
+        if (diff < 60)
+            return diff + "초 전";
+        else if (diff < 60*60)
+            return diff/60 + "분 전";
+        else if (diff < 60*60*24)
+            return diff/(60*60) +"시간 전";
+        else
+            return dateFormat.format(date);
+    }
 }
 
 
