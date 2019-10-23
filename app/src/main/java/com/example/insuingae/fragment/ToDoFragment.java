@@ -112,12 +112,14 @@ public class ToDoFragment extends Fragment {
                             insulist.clear();
                             Log.d("test", "sucess");
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                ArrayList<Date> contentsat = (ArrayList<Date>) document.getData().get("contentsAt");
                                 insulist.add(new Insus(
                                         document.getData().get("title").toString(),
                                         document.getData().get("publisher").toString(),
                                         (ArrayList<String>) document.getData().get("contents"),
-                                        (ArrayList<String>) document.getData().get("tags"),
-                                        new Date(document.getDate("createdAt").getTime())));
+                                        contentsat,
+                                        new Date(document.getDate("createdAt").getTime()),(ArrayList<String>) document.getData().get("tags"))
+                                        );
                             }
                             adapter.notifyDataSetChanged();
                             loaderlayout.setVisibility(View.INVISIBLE);

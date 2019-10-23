@@ -88,13 +88,22 @@ public class CompleteFragment extends Fragment {
                     Log.d("test", "sucess");
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        try{Date date = new Date(document.getDate("completedAt").getTime());
+                            if(sdf.format(date).equals(sdf.format(new Date()))){
+                                insulist.add(new Insus(
+                                        document.getData().get("title").toString(),
+                                        document.getData().get("publisher").toString(),
+                                        (ArrayList<String>) document.getData().get("contents"),
+                                        (ArrayList<Date>) document.getData().get("contentsAt"),
+                                        new Date(document.getDate("createdAt").getTime()),
+                                        (ArrayList<String>) document.getData().get("tags"))
+                                );
+                            }}catch (Exception e){e.printStackTrace();}
 
-                        insulist.add(new Insus(
-                                document.getData().get("title").toString(),
-                                document.getData().get("publisher").toString(),
-                                (ArrayList<String>) document.getData().get("contents"),
-                                (ArrayList<String>) document.getData().get("tags"),
-                                new Date(document.getDate("createdAt").getTime())));
+
+
+
                     }
                     adapter.notifyDataSetChanged();
                     loaderlayout.setVisibility(View.INVISIBLE);

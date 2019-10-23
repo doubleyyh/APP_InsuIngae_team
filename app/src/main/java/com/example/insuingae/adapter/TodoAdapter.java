@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.insuingae.Insus;
 import com.example.insuingae.R;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -135,12 +136,14 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
         holder.setItem(item);
         completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 activity.findViewById(R.id.loaderLayout).setVisibility(View.VISIBLE);
                 //버튼을 누르면 파이어베이스 상 해당 문서 iscompleted 가 true로 바뀜
                 final Insus temp_insu = items.get(position);
                 Date temp_date = temp_insu.getCreatedAt();
+                Date now = new Date();
                 temp_insu.setIscompleted(true);
+                temp_insu.setCompletedAt(now);
                 SimpleDateFormat colTitle =  new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 SimpleDateFormat docTitle = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
                 FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -153,7 +156,8 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
 
                                 items.remove(temp_insu);
                                 notifyDataSetChanged();
-                                Toast.makeText(activity, "해야 할일로 이동 되었습니다.", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(v, "오늘 한일로 이동되었습니다.",Snackbar.LENGTH_SHORT).show();
+
                                 activity.findViewById(R.id.loaderLayout).setVisibility(View.INVISIBLE);
                             }
                         });

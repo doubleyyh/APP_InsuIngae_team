@@ -29,11 +29,12 @@ public class UserInfoInitActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        user= FirebaseAuth.getInstance().getCurrentUser();
+        setContentView(R.layout.activity_user_info_init);
         Toolbar myToolbar = findViewById(R.id.include);
         setSupportActionBar(myToolbar);
         setToolbar("회원 정보 입력");
-        user= FirebaseAuth.getInstance().getCurrentUser();
-        setContentView(R.layout.activity_user_info_init);
         loaderLayout = findViewById(R.id.loaderLayout);
         findViewById(R.id.checkButton).setOnClickListener(onClickListener);
     }

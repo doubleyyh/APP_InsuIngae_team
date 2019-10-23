@@ -105,9 +105,11 @@ public class WriteActivity extends AppCompatActivity {
         if (title.length() > 0) {
 
             final ArrayList<String> contentsList = new ArrayList<>();
-            final ArrayList<String> formatList = new ArrayList<>();
+            //final ArrayList<String> formatList = new ArrayList<>();
 
             final Date date = new Date();
+            final ArrayList<Date> datelist = new ArrayList<>();
+
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
@@ -118,13 +120,14 @@ public class WriteActivity extends AppCompatActivity {
                 View view = (contentsLayout.getChildAt(i));
                 if (view instanceof EditText) {
                     String text = ((EditText) view).getText().toString();
+
                     if (text.length() > 0) {
                         contentsList.add(text);
-                        formatList.add("text");
+                        datelist.add(date);
                     }
                 }
             }
-            storeUpload(documentReference, new Insus(title, sosok + " " + jikcheck + " " + name, contentsList, tags, date));
+            storeUpload(documentReference, new Insus(title, sosok + " " + jikcheck + " " + name, contentsList, datelist, tags, date));
         } else {
             Toast.makeText(WriteActivity.this, "제목을 입력해주세요.", Toast.LENGTH_SHORT).show();
         }
@@ -137,6 +140,7 @@ public class WriteActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        Log.d("뭐야", "모임");
                         Log.d("test", "DocumentSnapshot successfully written!");
                         /*Intent resultIntent = new Intent();
                         resultIntent.putExtra("postinfo", postInfo);
