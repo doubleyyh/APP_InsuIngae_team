@@ -66,7 +66,7 @@ public class UserInfoInitActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(UserInfoInitActivity.this, "회원정보 등록에 성공하였습니다.", Toast.LENGTH_SHORT);
+                        Toast.makeText(UserInfoInitActivity.this, "회원정보 등록에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                         loaderLayout.setVisibility(View.GONE);
                         finish();
                     }
@@ -74,7 +74,7 @@ public class UserInfoInitActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UserInfoInitActivity.this, "회원정보 등록에 실패하였습니다.", Toast.LENGTH_SHORT);
+                        Toast.makeText(UserInfoInitActivity.this, "회원정보 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show();
                         loaderLayout.setVisibility(View.GONE);
                     }
                 });

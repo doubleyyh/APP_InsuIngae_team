@@ -160,6 +160,21 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
                             }
                         });
 
+                firebaseFirestore.collection("Insus").document(colTitle.format(temp_date)).collection("time").document(docTitle.format(temp_date)).set(temp_insu)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("test", "complete_success");
+
+
+                                items.remove(temp_insu);
+                                notifyDataSetChanged();
+                                Snackbar.make(v, "오늘 한일로 이동되었습니다.",Snackbar.LENGTH_SHORT).show();
+
+                                activity.findViewById(R.id.loaderLayout).setVisibility(View.INVISIBLE);
+                            }
+                        });
+
             }
         });
     }

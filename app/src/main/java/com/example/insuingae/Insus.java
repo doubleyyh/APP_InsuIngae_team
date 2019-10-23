@@ -38,6 +38,16 @@ public class Insus {
         this.tags = tags;
     }
 
+    public Insus(String title, String publisher, ArrayList<String> contents, ArrayList<Date> contentsAt, Date createdAt, Date completedAt, boolean iscompleted, ArrayList<String> tags) {
+        this.title = title;
+        this.publisher = publisher;
+        this.contents = contents;
+        this.contentsAt = contentsAt;
+        this.createdAt = createdAt;
+        this.completedAt = completedAt;
+        this.iscompleted = iscompleted;
+        this.tags = tags;
+    }
 
     public Map<String, Object> getInsus(){
         Map<String, Object> docData = new HashMap<>();

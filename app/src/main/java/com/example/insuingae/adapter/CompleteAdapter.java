@@ -21,7 +21,7 @@ import java.util.Locale;
 
 
 public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainViewHolder>{
-    ArrayList<Insus> items = new ArrayList<Insus>();
+    ArrayList<Insus> items;
     Activity activity;
     LayoutInflater inflater;
 

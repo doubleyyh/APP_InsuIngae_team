@@ -54,7 +54,7 @@ public class CompleteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         loaderlayout = getActivity().findViewById(R.id.loaderLayout);
-        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_to_do, container, false);
+        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_complete, container, false);
         Log.d("test", "frag2 실행");
         recyclerView = viewGroup.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);

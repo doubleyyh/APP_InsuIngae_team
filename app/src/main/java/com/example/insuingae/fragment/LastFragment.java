@@ -4,16 +4,39 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.example.insuingae.Insus;
 import com.example.insuingae.R;
+import com.example.insuingae.adapter.CompleteAdapter;
+import com.example.insuingae.adapter.LastAdapter;
+import com.example.insuingae.adapter.TodoAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class LastFragment extends Fragment {
+    private RecyclerView recyclerView;
+    ArrayList<Insus> insuList = new ArrayList<>();
+    LastAdapter adapter;
 
     public LastFragment() {
     }
@@ -29,8 +52,20 @@ public class LastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_last, container, false);
-    }
+
+        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_last, container, false);
+        recyclerView = viewGroup.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new LastAdapter(getActivity(), insuList);
+        update();
+        recyclerView.setAdapter(adapter);
+        return viewGroup;
+
+            }
+
+
 
 
     @Override
@@ -44,4 +79,39 @@ public class LastFragment extends Fragment {
         super.onDetach();
 
     }
+    private void update() {
+
+        final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+        firebaseFirestore.collectionGroup("time").whereEqualTo("iscompleted", true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    insuList.clear();
+                    Log.d("test", "sucess");
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        try{Date date = new Date(document.getDate("completedAt").getTime());
+                                insuList.add(new Insus(
+                                        document.getData().get("title").toString(),
+                                        document.getData().get("publisher").toString(),
+                                        (ArrayList<String>) document.getData().get("contents"),
+                                        (ArrayList<Date>) document.getData().get("contentsAt"),
+                                        new Date(document.getDate("createdAt").getTime()),
+                                        new Date(document.getDate("completedAt").getTime()),
+                                        true,
+                                        (ArrayList<String>) document.getData().get("tags"))
+                                );
+                            }catch (Exception e){e.printStackTrace();}
+
+                    }
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Log.d("test", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+        Log.d("test", "update끝");
+    }
+
 }
