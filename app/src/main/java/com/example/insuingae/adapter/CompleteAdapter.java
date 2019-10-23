@@ -59,6 +59,7 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
         }
 
         public void setItem(Insus item) {
+            container.removeAllViews();
             titleTextView.setText(item.getTitle());
             createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(item.getCreatedAt()));
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -67,7 +68,7 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
 
             Log.d("test100", item.getTitle() + " : " + contentsList.get(0));
 
-            container.removeAllViews();
+
 
             for (int i = 0; i < contentsList.size(); i++) {
                 /*if (i == 3) {

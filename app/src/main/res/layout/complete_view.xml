@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="3dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -12,13 +13,15 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="#00553E3E"
+        android:padding="5dp"
         app:cardElevation="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,29 +36,26 @@
                     android:textSize="30sp"
                     tools:text="제목제목" />
 
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_weight="0"
-                    android:text="복구" />
+                    android:backgroundTint="#00FFFFFF"
+                    app:srcCompat="@drawable/ic_more_vert_black_24dp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical"
+                android:padding="5dp">
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/contentsTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="내용내용" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -66,8 +66,8 @@
                     android:id="@+id/tagTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="#태그" />
+                    android:layout_margin="3dp"
+                    android:layout_weight="0" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -78,13 +78,18 @@
                         android:id="@+id/dateTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2019-10-22 09:30" />
+                        android:layout_margin="3dp"
+                        android:text="2019-10-22 09:30"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/publisherTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="36dp"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="3dp"
                         android:text="작성자"
                         app:layout_constraintStart_toEndOf="@+id/dateTextView"
                         app:layout_constraintTop_toTopOf="parent" />

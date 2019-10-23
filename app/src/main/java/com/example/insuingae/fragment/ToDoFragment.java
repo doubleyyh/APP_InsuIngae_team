@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.example.insuingae.Insus;
 import com.example.insuingae.R;
@@ -39,7 +41,7 @@ public class ToDoFragment extends Fragment {
     ArrayList<Insus> insulist = new ArrayList<>();
     TodoAdapter adapter;
     FirebaseFirestore firebaseFirestore;
-
+    RelativeLayout loaderlayout;
 
     public ToDoFragment() {
     }
@@ -53,6 +55,8 @@ public class ToDoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        loaderlayout = getActivity().findViewById(R.id.loaderLayout);
+
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_to_do, container, false);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -61,16 +65,20 @@ public class ToDoFragment extends Fragment {
         viewGroup.findViewById(R.id.floatingActionButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myStartActivity(WriteActivity.class);
+
+                loaderlayout.setVisibility(View.VISIBLE);
+                startActivityForResult(new Intent(getActivity(), WriteActivity.class), 1);
+
             }
         });
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         update();
         adapter = new TodoAdapter(getActivity(), insulist);
         recyclerView.setAdapter(adapter);
-
         Log.d("test", "onCreateView실행");
+
         return viewGroup;
     }
 
@@ -94,6 +102,7 @@ public class ToDoFragment extends Fragment {
     }
 
     private void update() {
+        loaderlayout.setVisibility(View.VISIBLE);
 
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseFirestore.collectionGroup("time").whereEqualTo("iscompleted", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -103,14 +112,17 @@ public class ToDoFragment extends Fragment {
                             insulist.clear();
                             Log.d("test", "sucess");
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                ArrayList<Date> contentsat = (ArrayList<Date>) document.getData().get("contentsAt");
                                 insulist.add(new Insus(
                                         document.getData().get("title").toString(),
                                         document.getData().get("publisher").toString(),
                                         (ArrayList<String>) document.getData().get("contents"),
-                                        (ArrayList<String>) document.getData().get("tags"),
-                                        new Date(document.getDate("createdAt").getTime())));
+                                        contentsat,
+                                        new Date(document.getDate("createdAt").getTime()),(ArrayList<String>) document.getData().get("tags"))
+                                        );
                             }
                             adapter.notifyDataSetChanged();
+                            loaderlayout.setVisibility(View.INVISIBLE);
                         } else {
                             Log.d("test", "Error getting documents: ", task.getException());
                         }
@@ -123,5 +135,16 @@ public class ToDoFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("test", "onResume실행");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case 1:
+                update();
+                adapter.notifyDataSetChanged();
+                loaderlayout.setVisibility(View.INVISIBLE);
+        }
     }
 }

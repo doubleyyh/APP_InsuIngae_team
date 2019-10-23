@@ -1,46 +1,63 @@
 package com.example.insuingae;
 
-import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
 import java.util.Map;
 
 public class Insus {
     private String title;
     private String publisher;
     private ArrayList<String> contents;
+    ArrayList<Date> contentsAt;
     private Date createdAt;
+    private Date completedAt;
     private boolean iscompleted;
     private ArrayList<String> tags;
 
-    public Insus(String title, String publisher, ArrayList<String> contents, ArrayList<String> tags, Date createdAt) {
+    public Insus(String title, String publisher, ArrayList<String> contents, ArrayList<Date> contentsAt, ArrayList<String> tags, Date createdAt) {
         this.title = title;
         this.publisher = publisher;
         this.contents = contents;
+        this.contentsAt = contentsAt;
         this.createdAt = createdAt;
         this.tags = tags;
         this.iscompleted = false;
+        this.completedAt = null;
     }
-
-    public Insus(String title, String publisher, ArrayList<String> contents, Date createdAt, ArrayList<String> tags, boolean iscompleted) {
+    public Insus(String title, String publisher, ArrayList<String> contents, ArrayList<Date> contentsAt, Date createdAt, ArrayList<String> tags) {
         this.title = title;
         this.publisher = publisher;
         this.contents = contents;
-        this.tags = tags;
+        this.contentsAt = contentsAt;
         this.createdAt = createdAt;
-        this.iscompleted = iscompleted;
+        this.completedAt = null;
+        this.iscompleted = false;
+        this.tags = tags;
     }
+
+
     public Map<String, Object> getInsus(){
         Map<String, Object> docData = new HashMap<>();
         docData.put("title",title);
         docData.put("contents",contents);
         docData.put("publisher",publisher);
         docData.put("createdAt",createdAt);
+        docData.put("contentsAt", contentsAt);
         docData.put("iscompleted", iscompleted);
         docData.put("tags", tags);
+        docData.put("completedAt", completedAt);
         return  docData;
+    }
+
+    public ArrayList<Date> getContentsAt() {
+        return contentsAt;
+    }
+
+    public void setContentsAt(ArrayList<Date> contentsAt) {
+        this.contentsAt = contentsAt;
     }
 
     public ArrayList<String> getTags() {
@@ -51,8 +68,24 @@ public class Insus {
         this.tags = tags;
     }
 
+    public void setContents(ArrayList<String> contents) {
+        this.contents = contents;
+    }
+
+    public Date getCompletedAt() {
+        return completedAt;
+    }
+
+    public void setCompletedAt(Date completedAt) {
+        this.completedAt = completedAt;
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public ArrayList<String> getContents() {
+        return contents;
     }
 
     public void setTitle(String title) {
@@ -67,13 +100,6 @@ public class Insus {
         this.publisher = publisher;
     }
 
-    public ArrayList<String> getContents() {
-        return contents;
-    }
-
-    public void setContents(ArrayList<String> contents) {
-        this.contents = contents;
-    }
 
     public Date getCreatedAt() {
         return createdAt;
