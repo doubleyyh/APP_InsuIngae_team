@@ -27,10 +27,10 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
+
 
 
 public class ToDoFragment extends Fragment {
@@ -66,12 +66,11 @@ public class ToDoFragment extends Fragment {
         });
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        update();
         adapter = new TodoAdapter(getActivity(), insulist);
-        Update();
-
         recyclerView.setAdapter(adapter);
 
-
+        Log.d("test", "onCreateView실행");
         return viewGroup;
     }
 
@@ -88,22 +87,21 @@ public class ToDoFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
     private void myStartActivity(Class c) {
         Intent intent = new Intent(getActivity(), c);
         getActivity().startActivityForResult(intent, 1);
     }
 
-    private void Update() {
-        insulist.clear();
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private void update() {
+
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        final CollectionReference collectionReference = firebaseFirestore.collection("Insus").document("" + simpleDateFormat.format(date)).collection("time");
-        collectionReference.whereEqualTo("iscompleted", false).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firebaseFirestore.collectionGroup("time").whereEqualTo("iscompleted", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            insulist.clear();
+                            Log.d("test", "sucess");
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 insulist.add(new Insus(
                                         document.getData().get("title").toString(),
@@ -118,7 +116,12 @@ public class ToDoFragment extends Fragment {
                         }
                     }
                 });
-
+        Log.d("test", "update끝");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("test", "onResume실행");
+    }
 }

@@ -29,11 +29,7 @@ import java.util.Locale;
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder> {
     ArrayList<Insus> items = new ArrayList<Insus>();
     Activity activity;
-    LinearLayout container;
     LayoutInflater inflater;
-
-    TextView tagtextView;
-    TextView datetextView;
 
     public TodoAdapter(Activity activity, ArrayList<Insus> items) {
         this.activity = activity;
@@ -43,6 +39,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
     @NonNull
     @Override
     public TodoAdapter.MainViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
+
         inflater = LayoutInflater.from(parent.getContext());
         final View itemView = inflater.inflate(R.layout.insu_view, parent, false);
         final MainViewHolder mainViewHolder = new MainViewHolder(itemView);
@@ -59,11 +56,15 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
         TextView titleTextView;
         TextView createdAtTextView;
         TextView publisherTextView;
+        LinearLayout container;
+        TextView tagtextView;
+        TextView datetextView;
 
 
 
         MainViewHolder(View v) {
             super(v);
+
             titleTextView = v.findViewById(R.id.titleEditText);
             createdAtTextView = v.findViewById(R.id.dateTextView);
             container = v.findViewById(R.id.container);
@@ -78,19 +79,29 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             ArrayList<String> contentsList = item.getContents();
             ArrayList<String> tagsList = item.getTags();
+
+            Log.d("test100", item.getTitle() + " : " + contentsList.get(0));
+
+            container.removeAllViews();
+
             for (int i = 0; i < contentsList.size(); i++) {
-                if (i == 3) {
+                /*if (i == 3) {
                     TextView textView = new TextView(activity);
                     textView.setLayoutParams(layoutParams);
                     textView.setText("자세히 보기");
                     container.addView(textView);
-                }
-
+                }*/
                 String contents = contentsList.get(i);
                 TextView textView = (TextView) inflater.inflate(R.layout.view_contents_text, container, false);
                 textView.setText(contents);
+
+
                 container.addView(textView);
             }
+
+
+
+
             for (int i = 0; i < tagsList.size(); i++) {
                 String tags = tagsList.get(i);
             if(i == 0) {

@@ -43,12 +43,13 @@
 
             </LinearLayout>
 
-            <FrameLayout
+            <LinearLayout
+                android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#8A8A8A">
+                android:orientation="vertical">
 
-            </FrameLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/contentsTextView"
@@ -56,41 +57,41 @@
                 android:layout_height="wrap_content"
                 tools:text="내용내용" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#A09D9D">
-
-            </FrameLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tagTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0"
                     android:text="#태그" />
 
-                <TextView
-                    android:id="@+id/dateTextView"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="2019-10-22 09:30" />
+                    android:layout_weight="0">
+
+                    <TextView
+                        android:id="@+id/dateTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2019-10-22 09:30" />
+
+                    <TextView
+                        android:id="@+id/publisherTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="36dp"
+                        android:text="작성자"
+                        app:layout_constraintStart_toEndOf="@+id/dateTextView"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/publisherTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:layout_weight="0"
-                android:text="작성자" />
 
         </LinearLayout>
 

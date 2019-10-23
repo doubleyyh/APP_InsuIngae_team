@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,12 +18,21 @@ import com.example.insuingae.Insus;
 import com.example.insuingae.R;
 import com.example.insuingae.adapter.CompleteAdapter;
 import com.example.insuingae.adapter.TodoAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class CompleteFragment extends Fragment {
     private RecyclerView recyclerView;
+    ArrayList<Insus> insulist = new ArrayList<>();
+    CompleteAdapter adapter;
+    FirebaseFirestore firebaseFirestore;
+
 
     public CompleteFragment() {}
 
@@ -45,14 +55,8 @@ public class CompleteFragment extends Fragment {
         //FloatingActionButton floatingActionButton = viewGroup.findViewById(R.id.floatingActionButton).setOnClickListener();
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        CompleteAdapter adapter = new CompleteAdapter(getActivity());
-        ArrayList<String> test = new ArrayList<String>();
-        test.add("aa");ArrayList<String> tags = new ArrayList<String>();
-        tags.add( "#dadfasdf");
-        adapter.addItem(new Insus("test", "ddd", test, tags, new Date()));
-
-
-
+        adapter = new CompleteAdapter(getActivity(), insulist);
+        update();
         recyclerView.setAdapter(adapter);
         return viewGroup;
     }
@@ -65,5 +69,32 @@ public class CompleteFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    private void update() {
+
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collectionGroup("time").whereEqualTo("iscompleted", true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    insulist.clear();
+                    Log.d("test", "sucess");
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        insulist.add(new Insus(
+                                document.getData().get("title").toString(),
+                                document.getData().get("publisher").toString(),
+                                (ArrayList<String>) document.getData().get("contents"),
+                                (ArrayList<String>) document.getData().get("tags"),
+                                new Date(document.getDate("createdAt").getTime())));
+                    }
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Log.d("test", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+        Log.d("test", "update끝");
     }
 }
