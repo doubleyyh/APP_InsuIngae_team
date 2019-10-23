@@ -31,10 +31,12 @@ public class MainActivity extends AppCompatActivity {
     ToDoFragment todofragment;
     CompleteFragment completeFragment;
     LastFragment lastFragment;
+    private BackPressCloseHandler backPressCloseHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         Toolbar myToolbar = findViewById(R.id.include);
         setSupportActionBar(myToolbar);
@@ -128,7 +130,9 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
+    @Override public void onBackPressed(){
+        //super.onBackPressed();
+        backPressCloseHandler.onBackPressed();
+    }
 }
+
