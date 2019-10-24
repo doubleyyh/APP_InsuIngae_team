@@ -28,6 +28,7 @@ import com.example.insuingae.activity.MainActivity;
 import com.example.insuingae.fragment.ToDoFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
@@ -78,6 +79,7 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
     }
 
     class MainViewHolder extends RecyclerView.ViewHolder {
+
         TextView titleTextView;
         TextView createdAtTextView;
         TextView publisherTextView;
@@ -132,14 +134,14 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
                 String tags = tagsList.get(i);
             if(i == 0) {
                     tagtextView.setText("#" + tags);
-                }else {
+                }
                 tagtextView.append(" #" + tags);
             }
-            }
+
             Date date = item.getCreatedAt();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             datetextView.setText(simpleDateFormat.format(date));
-            createdAtTextView.setText(timeConverter(date) + "에 인수");
+            createdAtTextView.setText(timeConverter(date));
             publisherTextView.setText(item.getPublisher());
         }
 
@@ -177,8 +179,6 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
                                 activity.findViewById(R.id.loaderLayout).setVisibility(View.INVISIBLE);
                             }
                         });
-
-
             }
         });
     }
@@ -193,7 +193,7 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
         items.add(item);
     }
 
-    private void showPopup(View v, final int position) {
+    private void showPopup(final View v, final int position) {
         PopupMenu popup = new PopupMenu(activity, v);
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -203,7 +203,7 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
 
                         return true;
                     case R.id.delete:
-
+                        deleteItem(v,position);
                         return true;
                     default:
                         return false;
@@ -216,10 +216,25 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
         popup.show();
     }
 
-    private void myStartActivity(Class c, Insus insus) {
+    private void myStartActivity(Class c) {
         Intent intent = new Intent(activity, c);
-        intent.putExtra("Insus", insus);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, 1);
+    }
+    public void deleteItem (View v,int position){
+        Insus item = items.get(position-1);
+        Date temp_date = item.getCreatedAt();
+        SimpleDateFormat colTitle = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat docTitle = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("Insus").document(colTitle.format(temp_date)).collection("time").document(docTitle.format(temp_date)).delete();
+
+        items.remove(item);
+        notifyDataSetChanged();
+
+        Snackbar.make(v, "삭제되었습니다.",Snackbar.LENGTH_SHORT).show();
+
+        activity.findViewById(R.id.loaderLayout).setVisibility(View.INVISIBLE);
     }
     //시각을 전달받아 현재 시간과 차이를 구하는 메서드
     public String timeConverter(Date date){

@@ -3,16 +3,21 @@ package com.example.insuingae.adapter;
 import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.insuingae.Insus;
 import com.example.insuingae.R;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,10 +37,16 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
     @NonNull
     @Override
     public CompleteAdapter.MainViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
+
         inflater = LayoutInflater.from(parent.getContext());
         final View itemView = inflater.inflate(R.layout.complete_view, parent, false);
         final MainViewHolder mainViewHolder = new MainViewHolder(itemView);
-
+        itemView.findViewById(R.id.imageButton2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup(v, mainViewHolder.getAdapterPosition()+1);
+            }
+        });
         return mainViewHolder;
     }
 
@@ -50,6 +61,7 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
         MainViewHolder(View v) {
             super(v);
             titleTextView = v.findViewById(R.id.titleEditText);
+            createdAtTextView = v.findViewById(R.id.dateTextView);
             container = v.findViewById(R.id.container);
             tagtextView = v.findViewById(R.id.tagTextView);
             datetextView = v.findViewById(R.id.dateTextView);
@@ -87,14 +99,12 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
                 String tags = tagsList.get(i);
                 if(i == 0) {
                     tagtextView.setText("#" + tags);
-                }else {
-                    tagtextView.append(" #" + tags);
                 }
+                tagtextView.append(" #" + tags);
             }
-            Date date = item.getCompletedAt();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            //createdAtTextView.setText();
-            datetextView.setText(timeConverter(date) + "에 완료");
+            Date date = item.getCreatedAt();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH시 mm분");
+            datetextView.setText(simpleDateFormat.format(date));
             publisherTextView.setText(item.getPublisher());
         }
 
@@ -105,9 +115,29 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
         Insus item = items.get(position);
         holder.setItem(item);
     }
+    private void showPopup(final View v, final int position) {
+        PopupMenu popup = new PopupMenu(activity, v);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.restore:
+                        restoreItem(v,position);
+                        return true;
+                    case R.id.modify2:
+                        return true;
+                    case R.id.delete2:
+                        deleteItem(v,position);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
 
-    public void addItem(Insus item) {
-        items.add(item);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.popup_menu_complete, popup.getMenu());
+        popup.show();
     }
 
 
@@ -115,6 +145,33 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
     @Override
     public int getItemCount() {
         return items.size();
+    }
+    public void restoreItem (View v, int position){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Insus item = items.get(position-1);
+        Date temp_date = item.getCreatedAt();
+        SimpleDateFormat colTitle = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat docTitle = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+
+        item.setIscompleted(false);
+        db.collection("Insus").document(colTitle.format(temp_date)).collection("time").document(docTitle.format(temp_date)).set(item);
+
+        items.remove(item);
+        notifyDataSetChanged();
+        Snackbar.make(v, "오늘 할일로 이동되었습니다.",Snackbar.LENGTH_SHORT).show();
+    }
+    public void deleteItem (View v, int position){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Insus item = items.get(position-1);
+        Date temp_date = item.getCreatedAt();
+        SimpleDateFormat colTitle = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat docTitle = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+
+        db.collection("Insus").document(colTitle.format(temp_date)).collection("time").document(docTitle.format(temp_date)).delete();
+
+        items.remove(item);
+        notifyDataSetChanged();
+        Snackbar.make(v, "삭제되었습니다.",Snackbar.LENGTH_SHORT).show();
     }
 
     public String timeConverter(Date date){
