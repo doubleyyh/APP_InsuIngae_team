@@ -1,4 +1,5 @@
 package com.example.insuingae;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,11 +10,11 @@ import java.util.HashMap;
 
 import java.util.Map;
 
-public class Insus implements Parcelable {
+public class Insus implements Parcelable{
     private String title;
     private String publisher;
     private ArrayList<String> contents;
-    ArrayList<Date> contentsAt;
+    private ArrayList<Date> contentsAt;
     private Date createdAt;
     private Date completedAt;
     private boolean iscompleted;
@@ -32,6 +33,7 @@ public class Insus implements Parcelable {
     public Insus(String title, String publisher, ArrayList<String> contents, ArrayList<Date> contentsAt, Date createdAt, ArrayList<String> tags) {
         this.title = title;
         this.publisher = publisher;
+
         this.contents = contents;
         this.contentsAt = contentsAt;
         this.createdAt = createdAt;
@@ -43,6 +45,7 @@ public class Insus implements Parcelable {
     public Insus(String title, String publisher, ArrayList<String> contents, ArrayList<Date> contentsAt, Date createdAt, Date completedAt, boolean iscompleted, ArrayList<String> tags) {
         this.title = title;
         this.publisher = publisher;
+
         this.contents = contents;
         this.contentsAt = contentsAt;
         this.createdAt = createdAt;
@@ -50,6 +53,37 @@ public class Insus implements Parcelable {
         this.iscompleted = iscompleted;
         this.tags = tags;
     }
+
+    public Insus(Parcel source){
+        try {
+            this.title =source.readString();
+            this.publisher = source.readString();
+            this.contents = source.readArrayList(Insus.class.getClassLoader());
+            this.contentsAt = source.readArrayList(Insus.class.getClassLoader());
+            this.createdAt = new Date(source.readLong());
+            this.completedAt = new Date(source.readLong());
+            this.iscompleted = source.readByte() != 0;
+            this.tags = source.readArrayList(Insus.class.getClassLoader());
+
+        }catch (Exception e){}
+
+
+
+    }
+    public static Parcelable.Creator<Insus> CREATOR = new Parcelable.Creator<Insus>() {
+
+        @Override
+        public Insus createFromParcel(Parcel source) {
+            return new Insus(source);
+        }
+
+        @Override
+        public Insus[] newArray(int size) {
+            return new Insus[size];
+        }
+
+    };
+
 
     public Map<String, Object> getInsus(){
         Map<String, Object> docData = new HashMap<>();
@@ -129,6 +163,7 @@ public class Insus implements Parcelable {
         this.iscompleted = iscompleted;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -136,5 +171,19 @@ public class Insus implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        try{dest.writeString(title);
+            dest.writeString(publisher);
+            dest.writeList(contents);
+            dest.writeList(contentsAt);
+            dest.writeLong(createdAt.getTime());
+            dest.writeLong(completedAt.getTime());
+
+            dest.writeByte((byte)(iscompleted ? 1 : 0));
+            dest.writeList(tags);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 }
