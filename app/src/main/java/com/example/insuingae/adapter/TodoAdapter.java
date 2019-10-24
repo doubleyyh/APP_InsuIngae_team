@@ -66,15 +66,6 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
                 Log.d("test", ""+mainViewHolder.getAdapterPosition());
             }
         });
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, InsuActivity.class);
-                intent.putExtra("Insus", items.get(mainViewHolder.getAdapterPosition()+1));
-                Log.d("test", ""+mainViewHolder.getAdapterPosition());
-                activity.startActivity(intent);
-            }
-        });
         return mainViewHolder;
     }
 
