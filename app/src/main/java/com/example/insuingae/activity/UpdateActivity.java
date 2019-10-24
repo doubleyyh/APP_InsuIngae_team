@@ -116,9 +116,8 @@ public class UpdateActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
-
+                ((EditText)findViewById(R.id.addContentsTextview)).setText("");
+                ((EditText)findViewById(R.id.addTagsTextView)).setText("");
                 container.addView(view);
                 Snackbar.make(v, "인수인계가 추가되었습니다", Snackbar.LENGTH_SHORT).show();
             }
