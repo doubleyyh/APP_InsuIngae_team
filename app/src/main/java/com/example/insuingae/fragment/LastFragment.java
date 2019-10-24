@@ -34,8 +34,8 @@ public class LastFragment extends Fragment {
     RelativeLayout loaderlayout;
 
 
-
-    public LastFragment() {}
+    public LastFragment() {
+    }
 
     @Override
     public void onResume() {
@@ -91,19 +91,22 @@ public class LastFragment extends Fragment {
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        try{Date date = new Date(document.getDate("completedAt").getTime());
+                        try {
+                            Date date = new Date(document.getDate("completedAt").getTime());
 
-                                insulist.add(new Insus(
-                                        document.getData().get("title").toString(),
-                                        document.getData().get("publisher").toString(),
-                                        (ArrayList<String>) document.getData().get("contents"),
-                                        (ArrayList<Date>) document.getData().get("contentsAt"),
-                                        new Date(document.getDate("createdAt").getTime()),
-                                        date,
-                                        true,
-                                        (ArrayList<String>) document.getData().get("tags"))
-                                );
-                            }catch (Exception e){e.printStackTrace();}
+                            insulist.add(new Insus(
+                                    document.getData().get("title").toString(),
+                                    document.getData().get("publisher").toString(),
+                                    (ArrayList<String>) document.getData().get("contents"),
+                                    (ArrayList<Date>) document.getData().get("contentsAt"),
+                                    new Date(document.getDate("createdAt").getTime()),
+                                    date,
+                                    true,
+                                    (ArrayList<String>) document.getData().get("tags"))
+                            );
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                     }
                     adapter.notifyDataSetChanged();
@@ -117,20 +120,23 @@ public class LastFragment extends Fragment {
 
     }
 
-    public void search(String[] s){
-        searchlist.clear();
-        for(String i : s){
-            for(Insus insus : insulist){
-                ArrayList<String> arrayList = insus.getTags();
-                if(arrayList.contains(i)){
 
-                    if(!searchlist.contains(insus))
-                    searchlist.add(insus);
+    public void search(String[] s) {
+        searchlist.clear();
+
+        for (Insus insus : insulist) {
+            ArrayList<String> arrayList = insus.getTags();
+            for (int i = 1; i < s.length; i++) {
+                if (!arrayList.contains(s[i]))
+                    break;
+                if (i == s.length - 1) {
+                    if (!searchlist.contains(insus))
+                        searchlist.add(insus);
                 }
             }
         }
 
-    Log.d("test", "compledt");
+        Log.d("test", "compledt");
         recyclerView.setAdapter(new CompleteAdapter(getActivity(), searchlist));
     }
 }
