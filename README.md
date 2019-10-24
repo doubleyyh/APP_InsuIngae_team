@@ -37,7 +37,7 @@ The 2.0 version of the Apache License, approved by the ASF in 2004, helps us ach
 ## 알려진 버그
 제보해주세요  
 
-## 개선 획
+## 개선 계획
 인수인계에 사진/동영상/오디오 삽입  
 인수인계 데이터 추가/수정  
 지난 인수인계를 년/월/일 으로 분류하기   
