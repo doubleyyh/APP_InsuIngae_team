@@ -203,6 +203,14 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
+                    case  R.id.update:
+
+                        Log.d("test", "update");
+                        Intent intent = new Intent(activity, UpdateActivity.class);
+                        intent.putExtra("insus", items.get(position-1));
+
+                        activity.startActivity(intent);
+                        return true;
                     case R.id.modify:
 
                         return true;
