@@ -125,8 +125,9 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
                 String tags = tagsList.get(i);
             if(i == 0) {
                     tagtextView.setText("#" + tags);
-                }
+                }else {
                 tagtextView.append(" #" + tags);
+            }
             }
 
             Date date = item.getCreatedAt();

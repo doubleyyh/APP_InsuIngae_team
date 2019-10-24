@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                                 .replace(R.id.container, completeFragment).commit();
                         return true;
                     case R.id.last:
-                        mSearch.collapseActionView();
+                        /*mSearch.collapseActionView();*/
                         setToolbar("지난 인수인계");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, lastFragment).commit();
 
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.mainmenu, menu);
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, todofragment).commit();
                 return true;
             }
@@ -182,6 +184,10 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override public void onBackPressed(){
         //super.onBackPressed();
+        bottomNavigationView.setSelectedItemId(R.id.todo);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, todofragment).commit();
+
         backPressCloseHandler.onBackPressed();
     }
 

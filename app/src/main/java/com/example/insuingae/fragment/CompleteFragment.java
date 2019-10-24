@@ -76,6 +76,15 @@ public class CompleteFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter = new CompleteAdapter(getActivity(), insulist);
+
+        update();
+        recyclerView.setAdapter(adapter);
+    }
+
     private void update() {
         loaderlayout.setVisibility(View.VISIBLE);
         final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -102,7 +111,6 @@ public class CompleteFragment extends Fragment {
                                         (ArrayList<String>) document.getData().get("tags"))
                                 );
                             }}catch (Exception e){e.printStackTrace();}
-
 
 
 

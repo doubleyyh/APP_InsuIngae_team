@@ -42,13 +42,13 @@ public class LastFragment extends Fragment {
         super.onResume();
         adapter = new CompleteAdapter(getActivity(), insulist);
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("test", "frag2 실행");
-
 
     }
 
@@ -120,14 +120,12 @@ public class LastFragment extends Fragment {
     public void search(String[] s){
         searchlist.clear();
         for(String i : s){
-
             for(Insus insus : insulist){
                 ArrayList<String> arrayList = insus.getTags();
                 if(arrayList.contains(i)){
 
                     if(!searchlist.contains(insus))
                     searchlist.add(insus);
-
                 }
             }
         }

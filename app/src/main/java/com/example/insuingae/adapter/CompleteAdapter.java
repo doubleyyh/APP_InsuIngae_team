@@ -99,12 +99,13 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
                 String tags = tagsList.get(i);
                 if(i == 0) {
                     tagtextView.setText("#" + tags);
+                }else {
+                    tagtextView.append(" #" + tags);
                 }
-                tagtextView.append(" #" + tags);
             }
-            Date date = item.getCreatedAt();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH시 mm분");
-            datetextView.setText(simpleDateFormat.format(date));
+            Date date = item.getCompletedAt();
+
+            datetextView.setText(timeConverter(date));
             publisherTextView.setText(item.getPublisher());
         }
 

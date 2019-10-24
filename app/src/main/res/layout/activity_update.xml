@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    tools:context=".activity.UpdateActivity">
+
+    <TextView
+        android:id="@+id/contentsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="내용"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/addContentsTextview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="인수인계를 추가해주세요"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/addTagsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="#태그를 추가해주세요"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="추가" />
+
+    <Button
+        android:id="@+id/completeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="완료" />
+
+</LinearLayout>
