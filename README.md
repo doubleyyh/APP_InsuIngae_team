@@ -31,6 +31,10 @@ The 2.0 version of the Apache License, approved by the ASF in 2004, helps us ach
 지난 인수인계를 년/월/일 으로 분류하기   
 지난 인수인계를 태그로보기/날짜로보기 선택   
 그룹별로 데이터를 보여주기
+
+## 설치환경
+Android api level 28(Version 9.0 Pie)
+
 ## 개발환경
 
  Android Studio 3.5.1  
