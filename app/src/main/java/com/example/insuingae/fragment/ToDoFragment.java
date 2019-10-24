@@ -117,7 +117,8 @@ public class ToDoFragment extends Fragment {
                                         document.getData().get("title").toString(),
                                         document.getData().get("publisher").toString(),
                                         (ArrayList<String>) document.getData().get("contents"), contentsat,
-                                        new Date(document.getDate("createdAt").getTime()),(ArrayList<String>) document.getData().get("tags"))
+                                        new Date(document.getDate("createdAt").getTime()),
+                                                (ArrayList<String>) document.getData().get("tags"))
                                         );
                             }
                             adapter.notifyDataSetChanged();

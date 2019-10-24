@@ -67,6 +67,7 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
             public void onClick(View v) {
                 Intent intent = new Intent(activity, UpdateActivity.class);
                 intent.putExtra("insus", items.get(mainViewHolder.getAdapterPosition()));
+
                 activity.startActivity(intent);}
         });
         itemView.findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
