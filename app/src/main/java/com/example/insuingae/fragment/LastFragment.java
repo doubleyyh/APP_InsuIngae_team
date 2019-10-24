@@ -118,7 +118,7 @@ public class LastFragment extends Fragment {
     }
 
     public void search(String[] s){
-
+        searchlist.clear();
         for(String i : s){
 
             for(Insus insus : insulist){
