@@ -7,28 +7,32 @@
 병아리 아니 유정란 개발자들의 탄생 과정이니 지켜봐주세요. 
 
 ## 개요
- 제작자 두명이 군 생활중 겪은 어려움 중 하나가 사수의 부재로 인한 업무 공백에서 오는 불편함이였습니다.  
- 한 분은 말년휴가를, 심지어 제 사수는 제가 전입 오기전에 이미 전역을 한 상태였습니다.  
- 이러한 짧은 기간의 인수인계 과정에서 오는 불편함을 해소하며 효율적으로 업무 처리를 하기 위한 도구 입니다   
- 
-## 설치안내
- 
-## 사용법
+ 특정 그룹 내에서 일어난 일들을 다른 사용자와 함께 기록하고 해시태그로 관리하여 효율적으로 일을 처리하기 위한 메모 앱 입니다.
 
-## 파일 정보 및 목록
+## 제작의도
+  
+## 주요기능 및 
 
 ## 저작권 및 사용권 정보
+APACHE LICENSE, VERSION 2.0  
+The 2.0 version of the Apache License, approved by the ASF in 2004, helps us achieve our goal of providing reliable and long-lived software products through collaborative open source software development.
 
 ## 배포자 및 개발자의 연락처 정보
 :anchor: 해군 병장 황윤용 (dbsdydghkd@gmail.com)  
 :running_man: 육군 병장 차윤석 (c9boom7@naver.com)   
 (2019/10/25 기준)
+
 ## 알려진 버그
+제보해주세요  
 
-## 문제 발생에 대한 해결책
+## 개선사항
+인수인계에 사진/동영상/오디오 삽입
+인수인계 데이터 추가/수정
+지난 인수인계를 년/월/일 으로 분류하기
+인수인계 그룹을 만들어 데이터를 보여주기
 
-## 업데이트 정보
-V 1.0
+
+
 ## 개발환경
 
  Android Studio 3.5.1  
@@ -36,4 +40,5 @@ V 1.0
  JRE: 1.8.0_202-release-1483-b03 amd64  
  JVM: OpenJDK 64-Bit Server VM by JetBrains s.r.o  
  Windows 7 6.1
+ FirebaseAuth  
  Firebase Cloud Firestore
