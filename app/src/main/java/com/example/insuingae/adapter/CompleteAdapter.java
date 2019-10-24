@@ -36,7 +36,7 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
         final View itemView = inflater.inflate(R.layout.complete_view, parent, false);
         final MainViewHolder mainViewHolder = new MainViewHolder(itemView);
 
-        return new MainViewHolder(itemView);
+        return mainViewHolder;
     }
 
     class MainViewHolder extends RecyclerView.ViewHolder {

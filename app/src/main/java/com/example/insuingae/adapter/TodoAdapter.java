@@ -57,13 +57,24 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
         inflater = LayoutInflater.from(parent.getContext());
         final View itemView = inflater.inflate(R.layout.insu_view, parent, false);
         final MainViewHolder mainViewHolder = new MainViewHolder(itemView);
+        Log.d("test", ""+mainViewHolder.getAdapterPosition());
         itemView.findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopup(v, mainViewHolder.getAdapterPosition());
+                showPopup(v, mainViewHolder.getAdapterPosition()+1);
+                Log.d("test", ""+mainViewHolder.getAdapterPosition());
             }
         });
-        return new MainViewHolder(itemView);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, InsuActivity.class);
+                intent.putExtra("Insus", items.get(mainViewHolder.getAdapterPosition()+1));
+                Log.d("test", ""+mainViewHolder.getAdapterPosition());
+                activity.startActivity(intent);
+            }
+        });
+        return mainViewHolder;
     }
 
     class MainViewHolder extends RecyclerView.ViewHolder {
@@ -138,13 +149,7 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
     public void onBindViewHolder(@NonNull final TodoAdapter.MainViewHolder holder, final int position) {
         Insus item = items.get(position);
         holder.setItem(item);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myStartActivity(InsuActivity.class, items.get(position));
-            }
-        });
-
+        Log.d("test", position + "");
         completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

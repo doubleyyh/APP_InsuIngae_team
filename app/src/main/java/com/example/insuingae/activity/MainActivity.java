@@ -120,7 +120,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.app_bar_search:
-                Log.d("test", "appbarsearch");
+                Log.d("test", "app");
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, lastFragment).commit();
                 return true;
             case R.id.userInfo:
                 myStartActivity(UserModifyActivity.class);
@@ -133,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
         //super.onBackPressed();
         backPressCloseHandler.onBackPressed();
     }
+
+
 
 
 }

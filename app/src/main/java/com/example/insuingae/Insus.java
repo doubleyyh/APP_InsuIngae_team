@@ -1,6 +1,4 @@
 package com.example.insuingae;
-
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -138,6 +136,5 @@ public class Insus implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.
     }
 }
