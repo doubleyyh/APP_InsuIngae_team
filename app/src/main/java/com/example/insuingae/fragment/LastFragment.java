@@ -6,9 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -18,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.insuingae.Insus;
 import com.example.insuingae.R;
+import com.example.insuingae.adapter.CompleteAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,13 +27,22 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class LastFragment extends Fragment {
+    private RecyclerView recyclerView;
+    ArrayList<Insus> insulist = new ArrayList<>();
+    ArrayList<Insus> searchlist = new ArrayList<>();
+    public CompleteAdapter adapter;
+    RelativeLayout loaderlayout;
 
 
 
-    ArrayList<String> arrayList = new ArrayList<String>();
     public LastFragment() {}
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter = new CompleteAdapter(getActivity(), insulist);
+        recyclerView.setAdapter(adapter);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,27 +55,16 @@ public class LastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_last, container, false);
-
-
-        arrayList.add("2019-10");
-        String[] strings = new String[arrayList.size()];
-        int i = 0;
-        for(String string : arrayList){
-            strings[i++] = string;
-        }
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, strings) ;
-
-        ListView listview = (ListView) viewGroup.findViewById(R.id.listView) ;
-        listview.setAdapter(adapter) ;
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            }
-        });
+        loaderlayout = getActivity().findViewById(R.id.loaderLayout);
+        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_complete, container, false);
         Log.d("test", "frag2 실행");
+        recyclerView = viewGroup.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
 
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new CompleteAdapter(getActivity(), insulist);
+        update();
+        recyclerView.setAdapter(adapter);
         return viewGroup;
     }
 
@@ -82,27 +78,61 @@ public class LastFragment extends Fragment {
         super.onDetach();
     }
 
-    public void update(){
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseFirestore.collection("Insus")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                arrayList.add((document.getId()));
-                            }
-                        } else {
+    private void update() {
+        loaderlayout.setVisibility(View.VISIBLE);
+        final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
-                        }
+        firebaseFirestore.collectionGroup("time").whereEqualTo("iscompleted", true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    insulist.clear();
+                    Log.d("test11", "sucess");
+
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        try{Date date = new Date(document.getDate("completedAt").getTime());
+
+                                insulist.add(new Insus(
+                                        document.getData().get("title").toString(),
+                                        document.getData().get("publisher").toString(),
+                                        (ArrayList<String>) document.getData().get("contents"),
+                                        (ArrayList<Date>) document.getData().get("contentsAt"),
+                                        new Date(document.getDate("createdAt").getTime()),
+                                        date,
+                                        true,
+                                        (ArrayList<String>) document.getData().get("tags"))
+                                );
+                            }catch (Exception e){e.printStackTrace();}
+
                     }
-                });
+                    adapter.notifyDataSetChanged();
+                    loaderlayout.setVisibility(View.INVISIBLE);
+                } else {
+                    Log.d("test", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+        Log.d("test", "update끝");
+
     }
 
+    public void search(String[] s){
 
+        for(String i : s){
 
+            for(Insus insus : insulist){
+                ArrayList<String> arrayList = insus.getTags();
+                if(arrayList.contains(i)){
 
+                    if(!searchlist.contains(insus))
+                    searchlist.add(insus);
 
+                }
+            }
+        }
 
+    Log.d("test", "compledt");
+        recyclerView.setAdapter(new CompleteAdapter(getActivity(), searchlist));
+    }
 }
