@@ -20,7 +20,7 @@
 ## 저작권 및 사용권 정보
 
 ## 배포자 및 개발자의 연락처 정보
-:anchor: 해군 병장 황윤용 (dbsdydghkd@gmail.com) 
+:anchor: 해군 병장 황윤용 (dbsdydghkd@gmail.com)  
 :running_man: 육군 병장 차윤석 (c9boom7@naver.com)   
 (2019/10/25 기준)
 ## 알려진 버그
