@@ -1,5 +1,6 @@
 package com.example.insuingae.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +55,7 @@ public class WriteActivity extends AppCompatActivity {
         if(actionBar != null) {
             actionBar.setTitle("인수인계 작성");
         }
+
         /*for (String ta : tag){
             tags.add(ta);
             Log.d("test", ta);

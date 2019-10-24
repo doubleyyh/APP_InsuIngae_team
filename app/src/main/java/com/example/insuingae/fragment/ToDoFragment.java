@@ -105,7 +105,7 @@ public class ToDoFragment extends Fragment {
         loaderlayout.setVisibility(View.VISIBLE);
 
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseFirestore.collectionGroup("time").whereEqualTo("iscompleted", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firebaseFirestore.collectionGroup("time").whereEqualTo("iscompleted", false).orderBy("createdAt", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {

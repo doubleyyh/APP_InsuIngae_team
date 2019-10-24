@@ -15,6 +15,6 @@ public class InsuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insu);
         Insus insus = (Insus) getIntent().getSerializableExtra("Insus");
-        Log.d("test", insus.getTitle());
+
     }
 }

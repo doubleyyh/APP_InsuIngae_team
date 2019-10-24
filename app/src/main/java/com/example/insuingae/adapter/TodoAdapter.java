@@ -3,6 +3,7 @@ package com.example.insuingae.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -25,6 +26,8 @@ import com.example.insuingae.Insus;
 import com.example.insuingae.R;
 import com.example.insuingae.activity.InsuActivity;
 import com.example.insuingae.activity.MainActivity;
+import com.example.insuingae.activity.UpdateActivity;
+import com.example.insuingae.activity.WriteActivity;
 import com.example.insuingae.fragment.ToDoFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
@@ -38,7 +41,7 @@ import java.util.Locale;
 
 
 public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHolder> {
-    private ArrayList<Insus> items = new ArrayList<Insus>();
+    private ArrayList<Insus> items;
     private Activity activity;
     private LayoutInflater inflater;
     private Button completeButton;
@@ -59,11 +62,19 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
         final View itemView = inflater.inflate(R.layout.insu_view, parent, false);
         final MainViewHolder mainViewHolder = new MainViewHolder(itemView);
         Log.d("test", ""+mainViewHolder.getAdapterPosition());
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, UpdateActivity.class);
+                intent.putExtra("insus", items.get(mainViewHolder.getAdapterPosition()));
+                activity.startActivity(intent);}
+        });
         itemView.findViewById(R.id.imageButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPopup(v, mainViewHolder.getAdapterPosition()+1);
                 Log.d("test", ""+mainViewHolder.getAdapterPosition());
+
             }
         });
         return mainViewHolder;
@@ -141,7 +152,7 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
 
     @Override
     public void onBindViewHolder(@NonNull final TodoAdapter.MainViewHolder holder, final int position) {
-        Insus item = items.get(position);
+        final Insus item = items.get(position);
         holder.setItem(item);
         Log.d("test", position + "");
         completeButton.setOnClickListener(new View.OnClickListener() {
@@ -208,9 +219,10 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
         popup.show();
     }
 
-    private void myStartActivity(Class c) {
-        Intent intent = new Intent(activity, c);
-        activity.startActivityForResult(intent, 1);
+    private void myStartActivity(Class c, Insus insus) {
+        Intent intent = new Intent();
+        intent.putExtra("insus", insus);
+        activity.startActivity(intent);
     }
     public void deleteItem (View v,int position){
         Insus item = items.get(position-1);
