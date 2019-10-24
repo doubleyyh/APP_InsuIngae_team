@@ -50,7 +50,6 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
         MainViewHolder(View v) {
             super(v);
             titleTextView = v.findViewById(R.id.titleEditText);
-            createdAtTextView = v.findViewById(R.id.dateTextView);
             container = v.findViewById(R.id.container);
             tagtextView = v.findViewById(R.id.tagTextView);
             datetextView = v.findViewById(R.id.dateTextView);
@@ -61,7 +60,8 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
         public void setItem(Insus item) {
             container.removeAllViews();
             titleTextView.setText(item.getTitle());
-            createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(item.getCreatedAt()));
+
+
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             ArrayList<String> contentsList = item.getContents();
             ArrayList<String> tagsList = item.getTags();
@@ -87,12 +87,14 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
                 String tags = tagsList.get(i);
                 if(i == 0) {
                     tagtextView.setText("#" + tags);
+                }else {
+                    tagtextView.append(" #" + tags);
                 }
-                tagtextView.append(" #" + tags);
             }
-            Date date = item.getCreatedAt();
+            Date date = item.getCompletedAt();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            datetextView.setText(simpleDateFormat.format(date));
+            //createdAtTextView.setText();
+            datetextView.setText(timeConverter(date) + "에 완료");
             publisherTextView.setText(item.getPublisher());
         }
 
@@ -113,6 +115,27 @@ public class CompleteAdapter extends RecyclerView.Adapter<CompleteAdapter.MainVi
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public String timeConverter(Date date){
+        Date nowTime = new Date();
+        Date updatedTime = date;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY년 MM월 dd일");
+
+        long diff;
+
+        //현재시간과 넘어온 시간을 정수로 변환해 차이를 구한다
+        // 밀리세컨드 단위로 변환되기때문에 1000으로 나눠서 계산
+        diff = (nowTime.getTime() - updatedTime.getTime())/1000;
+        //
+        if (diff < 60)
+            return diff + "초 전";
+        else if (diff < 60*60)
+            return diff/60 + "분 전";
+        else if (diff < 60*60*24)
+            return diff/(60*60) +"시간 전";
+        else
+            return dateFormat.format(date);
     }
 
 }

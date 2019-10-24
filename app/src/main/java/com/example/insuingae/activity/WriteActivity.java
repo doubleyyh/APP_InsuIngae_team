@@ -116,7 +116,7 @@ public class WriteActivity extends AppCompatActivity {
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             final DocumentReference documentReference = firebaseFirestore.collection("Insus").document("" + simpleDateFormat.format(date)).collection("time").
                                                         document(simpleDateFormat2.format(date));
-            for (int i = 0; i < contentsLayout.getChildCount(); i++) {
+            for (int i = 1; i < contentsLayout.getChildCount(); i++) {
                 View view = (contentsLayout.getChildAt(i));
                 if (view instanceof EditText) {
                     String text = ((EditText) view).getText().toString();

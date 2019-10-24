@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 
 import com.example.insuingae.R;
@@ -31,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     ToDoFragment todofragment;
     CompleteFragment completeFragment;
     LastFragment lastFragment;
+    //Last2Fragment last2Fragment;
     private BackPressCloseHandler backPressCloseHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.last:
                         setToolbar("지난 인수인계");
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, lastFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, lastFragment).commit();
 
                         return true;
                     default:
@@ -134,5 +133,7 @@ public class MainActivity extends AppCompatActivity {
         //super.onBackPressed();
         backPressCloseHandler.onBackPressed();
     }
+
+
 }
 

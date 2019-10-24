@@ -1,30 +1,25 @@
 package com.example.insuingae.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
 import com.example.insuingae.Insus;
 import com.example.insuingae.R;
-import com.example.insuingae.adapter.CompleteAdapter;
-import com.example.insuingae.adapter.LastAdapter;
-import com.example.insuingae.adapter.TodoAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -34,84 +29,80 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class LastFragment extends Fragment {
-    private RecyclerView recyclerView;
-    ArrayList<Insus> insuList = new ArrayList<>();
-    LastAdapter adapter;
 
-    public LastFragment() {
-    }
+
+
+    ArrayList<String> arrayList = new ArrayList<String>();
+    public LastFragment() {}
+
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("test", "frag3 실행");
+        Log.d("test", "frag2 실행");
+
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_last, container, false);
-        recyclerView = viewGroup.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new LastAdapter(getActivity(), insuList);
-        update();
-        recyclerView.setAdapter(adapter);
-        return viewGroup;
 
+        arrayList.add("2019-10");
+        String[] strings = new String[arrayList.size()];
+        int i = 0;
+        for(String string : arrayList){
+            strings[i++] = string;
+        }
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, strings) ;
+
+        ListView listview = (ListView) viewGroup.findViewById(R.id.listView) ;
+        listview.setAdapter(adapter) ;
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             }
+        });
+        Log.d("test", "frag2 실행");
 
 
-
+        return viewGroup;
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-
     }
-    private void update() {
 
-        final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    public void update(){
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection("Insus")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                arrayList.add((document.getId()));
+                            }
+                        } else {
 
-        firebaseFirestore.collectionGroup("time").whereEqualTo("iscompleted", true).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    insuList.clear();
-                    Log.d("test", "sucess");
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        try{Date date = new Date(document.getDate("completedAt").getTime());
-                                insuList.add(new Insus(
-                                        document.getData().get("title").toString(),
-                                        document.getData().get("publisher").toString(),
-                                        (ArrayList<String>) document.getData().get("contents"),
-                                        (ArrayList<Date>) document.getData().get("contentsAt"),
-                                        new Date(document.getDate("createdAt").getTime()),
-                                        new Date(document.getDate("completedAt").getTime()),
-                                        true,
-                                        (ArrayList<String>) document.getData().get("tags"))
-                                );
-                            }catch (Exception e){e.printStackTrace();}
-
+                        }
                     }
-                    adapter.notifyDataSetChanged();
-                } else {
-                    Log.d("test", "Error getting documents: ", task.getException());
-                }
-            }
-        });
-        Log.d("test", "update끝");
+                });
     }
+
+
+
+
+
 
 }

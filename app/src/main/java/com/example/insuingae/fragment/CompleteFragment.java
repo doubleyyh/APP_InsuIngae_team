@@ -97,6 +97,8 @@ public class CompleteFragment extends Fragment {
                                         (ArrayList<String>) document.getData().get("contents"),
                                         (ArrayList<Date>) document.getData().get("contentsAt"),
                                         new Date(document.getDate("createdAt").getTime()),
+                                        date,
+                                        true,
                                         (ArrayList<String>) document.getData().get("tags"))
                                 );
                             }}catch (Exception e){e.printStackTrace();}

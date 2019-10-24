@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.UserModifyActivity"></activity>
+        <activity android:name=".activity.InsuActivity"></activity>
+        <activity android:name=".activity.UserModifyActivity" />
         <activity android:name=".activity.UserInfoInitActivity" />
         <activity android:name=".activity.SignUpActivity" />
         <activity android:name=".activity.LoginActivity" />

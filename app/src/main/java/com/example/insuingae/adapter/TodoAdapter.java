@@ -18,10 +18,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.insuingae.Insus;
 import com.example.insuingae.R;
+import com.example.insuingae.activity.InsuActivity;
 import com.example.insuingae.activity.MainActivity;
 import com.example.insuingae.fragment.ToDoFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,6 +41,7 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
     private Activity activity;
     private LayoutInflater inflater;
     private Button completeButton;
+
 
 
 
@@ -71,6 +74,7 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
         TextView tagtextView;
         TextView datetextView;
         RelativeLayout loaderlayout;
+        CardView cardView;
 
         MainViewHolder(View v) {
             super(v);
@@ -83,6 +87,7 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
             publisherTextView = v.findViewById(R.id.publisherTextView);
             completeButton = v.findViewById(R.id.completeButton);
             loaderlayout = v.findViewById(R.id.loaderLayout);
+            cardView = v.findViewById(R.id.cardView);
         }
 
         public void setItem(Insus item) {
@@ -116,13 +121,14 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
                 String tags = tagsList.get(i);
             if(i == 0) {
                     tagtextView.setText("#" + tags);
-                }
+                }else {
                 tagtextView.append(" #" + tags);
+            }
             }
             Date date = item.getCreatedAt();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             datetextView.setText(simpleDateFormat.format(date));
-            createdAtTextView.setText(timeConverter(date));
+            createdAtTextView.setText(timeConverter(date) + "에 인수");
             publisherTextView.setText(item.getPublisher());
         }
 
@@ -132,6 +138,13 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
     public void onBindViewHolder(@NonNull final TodoAdapter.MainViewHolder holder, final int position) {
         Insus item = items.get(position);
         holder.setItem(item);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myStartActivity(InsuActivity.class, items.get(position));
+            }
+        });
+
         completeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -160,20 +173,6 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
                             }
                         });
 
-                firebaseFirestore.collection("Insus").document(colTitle.format(temp_date)).collection("time").document(docTitle.format(temp_date)).set(temp_insu)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d("test", "complete_success");
-
-
-                                items.remove(temp_insu);
-                                notifyDataSetChanged();
-                                Snackbar.make(v, "오늘 한일로 이동되었습니다.",Snackbar.LENGTH_SHORT).show();
-
-                                activity.findViewById(R.id.loaderLayout).setVisibility(View.INVISIBLE);
-                            }
-                        });
 
             }
         });
@@ -212,9 +211,10 @@ public class    TodoAdapter extends RecyclerView.Adapter<TodoAdapter.MainViewHol
         popup.show();
     }
 
-    private void myStartActivity(Class c) {
+    private void myStartActivity(Class c, Insus insus) {
         Intent intent = new Intent(activity, c);
-        activity.startActivityForResult(intent, 1);
+        intent.putExtra("Insus", insus);
+        activity.startActivity(intent);
     }
     //시각을 전달받아 현재 시간과 차이를 구하는 메서드
     public String timeConverter(Date date){

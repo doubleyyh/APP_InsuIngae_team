@@ -1,13 +1,17 @@
 package com.example.insuingae;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 import java.util.Map;
 
-public class Insus {
+public class Insus implements Parcelable {
     private String title;
     private String publisher;
     private ArrayList<String> contents;
@@ -125,5 +129,15 @@ public class Insus {
 
     public void setIscompleted(boolean iscompleted) {
         this.iscompleted = iscompleted;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.
     }
 }
