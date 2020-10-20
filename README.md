@@ -30,7 +30,7 @@ APACHE LICENSE, VERSION 2.0
 The 2.0 version of the Apache License, approved by the ASF in 2004, helps us achieve our goal of providing reliable and long-lived software products through collaborative open source software development.
 
 ## 배포자 및 개발자의 연락처 정보
-:anchor: 해군 병장 황윤용 (dbsdydghkd@gmail.com)  
+:anchor: 해군 병장 황태호 (thwang@gmail.com)  
 :running_man: 육군 병장 차윤석 (c9boom7@naver.com)   
 (2019/10/25 기준)
 
